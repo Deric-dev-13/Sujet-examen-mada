@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>À Propos | Examen</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           VARIABLES & CONFIG GLOBALE
+           ========================================= */
+        :root {
+            --nav-height: 70px;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --tech-blue: #0ea5e9;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-input: #020617;
+            --border: rgba(255,255,255,0.1);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --shadow: rgba(0,0,0,0.6);
+        }
+
+        :root[data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-panel: #ffffff;
+            --bg-input: #e2e8f0;
+            --border: #cbd5e1;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding-top: var(--nav-height);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* =========================================
+           HEADER (Standard)
+           ========================================= */
+        header {
+            position: fixed; top: 0; width: 100%; height: var(--nav-height);
+            background: var(--bg-panel); border-bottom: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; z-index: 1000; box-shadow: 0 5px 20px var(--shadow);
+        }
+        .logo h1 { font-family: 'Cinzel', serif; font-size: 1.3rem; margin: 0; }
+        .logo span { color: var(--gold); }
+        .logo a { text-decoration: none; color: var(--text-main); }
+
+        .theme-btn {
+            background: transparent; border: 1px solid var(--border); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .page-header {
+            height: 40vh;
+            background: linear-gradient(to bottom, rgba(15,23,42,0.9), var(--bg-body)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 0 20px;
+        }
+        .page-header h2 { font-family: 'Cinzel', serif; font-size: 2.5rem; color: #fff; margin-bottom: 10px; text-shadow: 0 5px 15px #000; }
+        .page-header p { color: var(--gold); font-size: 1.1rem; letter-spacing: 1px; }
+
+        /* =========================================
+           CONTENU : MISSION
+           ========================================= */
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
+        
+        .mission-box {
+            background: var(--bg-panel); border: 1px solid var(--border); border-left: 4px solid var(--gold);
+            padding: 30px; border-radius: 8px; margin-bottom: 50px; position: relative;
+        }
+        .mission-box h3 { font-family: 'Cinzel'; margin-bottom: 15px; color: var(--text-main); }
+        .mission-box p { line-height: 1.6; color: var(--text-muted); }
+
+        /* =========================================
+           CATALOGUE ÉQUIPE (GRID)
+           ========================================= */
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title h3 { font-family: 'Cinzel'; font-size: 2rem; color: var(--gold); }
+        .section-title span { width: 60px; height: 3px; background: var(--text-muted); display: block; margin: 10px auto; }
+
+        .team-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: var(--bg-panel); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border); transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            padding: 30px 20px; position: relative;
+        }
+        .team-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px var(--shadow); }
+
+        /* Image Profile */
+        .profile-img-container {
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 3px solid var(--gold); padding: 3px;
+            margin-bottom: 20px; position: relative;
+        }
+        .profile-img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+            background-color: var(--bg-input);
+        }
+        
+        /* Badge Rôle */
+        .role-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
+            margin-bottom: 15px; letter-spacing: 1px;
+        }
+        .role-dev { background: rgba(14, 165, 233, 0.2); color: var(--tech-blue); border: 1px solid var(--tech-blue); }
+        .role-admin { background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .role-prof { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+
+        .member-name { font-family: 'Cinzel'; font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
+        .member-bio { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.4; }
+
+        .social-links { display: flex; gap: 15px; justify-content: center; }
+        .social-link { color: var(--text-muted); font-size: 1.1rem; transition: 0.3s; }
+        .social-link:hover { color: var(--gold); transform: scale(1.2); }
+
+        /* Loader */
+        .loader { text-align: center; width: 100%; padding: 20px; display: none; }
+
+        /* FOOTER */
+        footer {
+            background: var(--bg-input); border-top: 1px solid var(--gold);
+            padding: 40px 5%; text-align: center; margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1><i class="fas fa-graduation-cap"></i> EXAMEN <span>MADA</span></h1>
+            </a>
+        </div>
+        
+            <button class="theme-btn" onclick="toggleTheme()">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+        </div>
+        
+
+        <!-- Trigger Mobile -->
+        <div class="mobile-trigger" onclick="goHome()">
+            <i class="fas fa-home" style="color:var(--gold);"></i>
+        </div>  
+    </header>
+
+    <!-- HERO -->
+    <section class="page-header">
+        <h2>QUI SOMMES-NOUS ?</h2>
+        <p>Innovation, Excellence et Pédagogie au service de préparation d'examen CEPE, BEPC, BAC.</p>
+    </section>
+
+    <div class="section-container">
+        
+        <!-- MISSION -->
+        <div class="mission-box">
+            <h3><i class="fas fa-quote-left" style="color:var(--gold)"></i> NOTRE MISSION</h3>
+            <p>
+               <!-- Fondée avec une vision d'excellence, <strong>EXAMEN MADA</strong> est la première plateforme numérique dédiée aux étudiants et candidats de l'École Normale Supérieure pour l'Enseignement Technique. -->
+                Notre objectif est de démocratiser l'accès aux ressources pédagogiques (sujets, corrigés, annales) pour garantir l'égalité des chances et la réussite de tous.
+            </p>
+        </div>
+
+        <!-- CATALOGUE ÉQUIPE -->
+        <div class="section-title">
+            <h3>NOTRE ÉQUIPE & ENSEIGNANTS</h3>
+            <span></span>
+            <p style="color:var(--text-muted)">Les visages derrière la plateforme</p>
+        </div>
+
+        <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold)"></i></div>
+        
+        <div class="team-grid" id="teamGrid">
+            <!-- INJECTÉ PAR JS -->
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 EXAMEN MADA. Excellence et Innovation.</p>
+    </footer>
+
+    <script>
+        /* =========================================
+           1. CONFIGURATION & DONNÉES DE SECOURS
+           ========================================= */
+        // Remplacez ce lien par votre ressource MockAPI 'team'
+        const API_TEAM = "https://696d45f4f4a79b315180e444.mockapi.io/V1/Approposexamen";
+        const FALLBACK_TEAM = [
+           
+            {
+                id: 1,
+                name: "RATOVONJANAHARY Miandrisoa Deric",
+                role: " Développeur",
+                roleType: "dev",
+                image: "dev.jpg",
+                bio: " créateur de l'architecture technique d'EXAMEN MADA. Passionné par  la performance web.",
+                linkedin: "#", email: "#"
+            }/*,
+            {
+                id: 3,
+                name: "Mme. Rasoamanana",
+                role: "Resp. GMI & Math",
+                roleType: "prof",
+                image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
+                bio: "Professeure agrégée en Mathématiques, elle supervise la correction des sujets de la filière GMI et Mathématiques.",
+                linkedin: "#", email: "#"
+            },
+            {
+                id: 4,
+                name: "Mr. Randrianasolo",
+                role: "Resp. Génie Civil",
+                roleType: "prof",
+                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+                bio: "Ingénieur en BTP et enseignant chercheur, spécialiste des structures et de la résistance des matériaux.",
+                linkedin: "#", email: "#"
+            }*/
+            
+        ];
+        
+        /* =========================================
+           2. LOGIQUE JS
+           ========================================= */
+        
+        async function init() {
+            initTheme();
+            await loadTeam();
+        }
+
+        async function loadTeam() {
+            const grid = document.getElementById('teamGrid');
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
+            try {
+                const res = await fetch(API_TEAM);
+                if(!res.ok) throw new Error();
+                const data = await res.json();
+                renderTeam(data.length > 0 ? data : FALLBACK_TEAM);
+            } catch(e) {
+                console.warn("Utilisation des données de secours");
+                renderTeam(FALLBACK_TEAM);
+            }
+            loader.style.display = 'none';
+        }
+
+        function renderTeam(members) {
+            const grid = document.getElementById('teamGrid');
+            grid.innerHTML = '';
+
+            members.forEach(member => {
+                // Choix de la classe couleur selon le rôle
+                let badgeClass = 'role-prof'; // par défaut
+                if(member.roleType === 'dev') badgeClass = 'role-dev';
+                if(member.roleType === 'admin') badgeClass = 'role-admin';
+
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.innerHTML = `
+                    <div class="profile-img-container">
+                        <img src="${member.image}" alt="${member.name}" class="profile-img">
+                    </div>
+                    <span class="role-badge ${badgeClass}">${member.role}</span>
+                    <h4 class="member-name">${member.name}</h4>
+                    <p class="member-bio">${member.bio}</p>
+                    <div class="social-links">
+                        <a href="${member.linkedin || '#'}" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:${member.email || '#'}" class="social-link"><i class="fas fa-envelope"></i></a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- GESTION THÈME (Identique aux autres pages) ---
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+        
+       function goHome() {
+    // Redirige vers la racine du site (index.html)
+    window.location.href = "./index.html"; 
+    
+    // OU si vous voulez juste recharger la page actuelle :
+    // window.location.reload();
+} 
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        }
+
+        function updateThemeIcon(theme) {
+            document.getElementById('themeIcon').className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        init();
+    </script>
+</body>
+</html>

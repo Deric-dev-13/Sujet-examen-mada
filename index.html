@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <title>Examen  | CEPE • BEPC • BAC</title>
+    
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Fonts & Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+
+    <!-- BOUTON THEME -->
+    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+
+    <!-- HEADER -->
+    <header>
+        <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="logo">
+            <h1>EXAMEN MADA</h1>
+            <span>MADAGASCAR</span>
+        </div>
+        <div class="offline-badge" id="offlineBadge">HORS LIGNE</div>
+    </header>
+
+     <!-- SIDEBAR MOBILE -->
+    <div class="sidebar" id="sidebar">
+        <div style="text-align:right; margin-bottom:20px;">
+            <i class="fas fa-times" style="font-size:1.5rem; color:var(--text-main); cursor:pointer;" onclick="toggleMenu()"></i>
+        </div>
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Accueil</a>
+        <a href="appropos.html" class="sidebar-link"><i class="fas fa-info-circle"></i> À Propos</a>
+        <a href="contact.html" class="sidebar-link"><i class="fas fa-phone"></i> Contact</a>
+        <a href="#" class="sidebar-link" onclick="installPWA()"><i class="fas fa-download"></i> Télécharger App</a>
+    </div>
+    
+     <!-- HERO SECTION / PUBLICITÉS -->
+    <div class="hero" id="heroSection">
+        <!-- Les slides seront injectés ici par JS -->
+        <div class="hero-loader">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </div>
+        
+        <!-- Navigation du slider -->
+        <div class="hero-controls">
+            <button class="hero-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+            <div class="hero-dots" id="heroDots"></div>
+            <button class="hero-btn next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+    </div>
+
+    <!-- ANNONCES -->
+    <div class="ticker-wrap">
+        <div class="ticker" id="ticker">Bienvenue sur notre site EXAMEN MADA, veuillez visiter tous les catalogues pour trouver les documents.</div>
+    </div>
+
+    <!-- BARRE STICKY (RECHERCHE & FILTRES) -->
+    <div class="sticky-wrapper">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Chercher: Maths CEPE, Philo BAC...">
+        </div>
+     
+        <div class="filters">
+            <button class="cat-btn active" data-cat="all" onclick="filterSujets('all', this)">TOUT</button>
+            <button class="cat-btn" data-cat="CEPE" onclick="filterSujets('CEPE', this)">CEPE</button>
+            <button class="cat-btn" data-cat="BEPC" onclick="filterSujets('BEPC', this)">BEPC</button>
+            <button class="cat-btn" data-cat="BAC" onclick="filterSujets('BAC', this)">BAC</button>
+            <!-- BOUTON RÉSULTATS MODIFIÉ -->
+            <button class="cat-btn btn-result"   onclick="showResults(this)">
+                <i class="fas fa-trophy"></i> RÉSULTATS EXAMEN
+            </button>
+             <button class="cat-btn btn-cours" onclick="showCours(this)"><i class="fas fa-graduation-cap"></i> COURS</button>
+        </div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="container">
+        <div class="grid" id="grid"></div>
+        <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold)"></i></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4 class="footer-title">À PROPOS</h4>
+                <p style="color:var(--text-muted); font-size:0.9rem;">La référence des sujets d'examens et corrections à Madagascar.</p>
+            </div>
+            <div>
+                <h4 class="footer-title">CONTACT</h4>
+                <p class="footer-link"><i class="fab fa-whatsapp"></i> +261 34 11 084 01</p>
+                <p class="footer-link"><i class="fas fa-envelope"></i>rmiandrisoaderic@gmail.com</p>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:30px; font-size:0.8rem; color:var(--text-muted);">
+            &copy; 2026 Examen Mada. Tous droits réservés.
+        </div>
+    </footer>
+
+    <!-- MODAL PAIEMENT -->
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <h3 class="modal-title" id="mTitle">Titre</h3>
+            <p style="color:var(--gold); font-size:1.3rem; font-weight:bold; margin-bottom:15px;" id="mPrice">0 Ar</p>
+            <small>Envoyé au numéro:</small>
+
+            <div class="pay-options">
+                <div class="pay-card"><strong style="color:var(--mvola)">MVOLA</strong><span>034 11 084 01</span></br>
+                <small style="font-size: 0.1em;"> RATOVONJANAHARY Miandrisoa Deric</small></div>
+                <div class="pay-card"><strong style="color:var(--orange)">ORANGE</strong><span>032 52 304 18</span></br>
+                <small style="font-size: 0.1em;"> RATOVONJANAHARY Miandrisoa Deric</small></div>
+            </div>
+
+            <label class="upload-zone">
+                <i class="fas fa-camera fa-2x" style="color:var(--gold)"></i>
+                <div style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">Appuyez pour photo preuve</div>
+                <input type="file" id="proofFile" accept="image/*" style="display:none" onchange="handleFile()">
+                <div id="fileStatus" class="file-status"></div>
+            </label>
+
+            <button id="waBtn" class="btn-wa" onclick="sendToWhatsApp()">
+                <i class="fab fa-whatsapp"></i> ENVOYER PREUVE
+            </button>
+
+            <div style="border-top:1px solid var(--border); padding-top:15px; margin-top:10px;">
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:5px;">Code reçu (Max 30min) :</p>
+                <input type="text" id="codeInput" class="input-code" placeholder="CODE">
+                <button class="btn-unlock" onclick="verifyCode()">DÉBLOQUER</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
