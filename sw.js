@@ -1,23 +1,39 @@
-const CACHE_NAME = 'examen-elite-v1';
-const ASSETS = [
-  './',
-  './index.html',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap'
+const CACHE_NAME = 'mon-app-v1';
+const OFFLINE_URL = '/offline.html';
+
+const ASSETS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/style.css',
+  '/script.js',
+  '/ton-logo.png',
+  OFFLINE_URL // Très important : on met la page hors-ligne en cache !
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// Installation
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      return cache.addAll(ASSETS_TO_CACHE);
     })
   );
 });
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
+// Stratégie de récupération
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      // 1. Si le fichier est dans le cache, on le donne
+      if (response) return response;
+
+      // 2. Sinon, on essaie de le chercher sur internet
+      return fetch(event.request).catch(() => {
+        // 3. SI INTERNET ECHOUE (connexion perdue)
+        // On renvoie la page offline.html si c'est une page HTML
+        if (event.request.mode === 'navigate') {
+          return caches.match(OFFLINE_URL);
+        }
+      });
     })
   );
 });
