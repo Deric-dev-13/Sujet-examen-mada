@@ -1,6 +1,7 @@
 /* =========================================
        1. CONFIGURATION & DONNÉES
        ========================================= */
+      
     const CONFIG = {
         adminPhone: "261341108401",
         api: {
@@ -8,6 +9,7 @@
             cours: "https://6971ad9c32c6bacb12c422f5.mockapi.io/V1/Cours",
             resultats: "https://6971ad9c32c6bacb12c422f5.mockapi.io/V1/Resultats",
             pubs: "https://6945646bed253f51719b3a44.mockapi.io/documents/Pub",
+            annonces: "https://696d45f4f4a79b315180e444.mockapi.io/V1/Anoncesconcours"
         },
         images: {
             sujet: "sujet.jpg",
@@ -19,6 +21,8 @@
     };
 
     // Données de secours
+    const FALLBACK_ANNONCES = [ {id:1, text:"Bienvenue sur notre plateforme d'examen !", link:"#"} ];
+    
     const FALLBACK = [ {id:1, level:"CEPE", type:"Sujet", subject:"Mathématiques", year:"2024", price:"1000 Ar", password:"A", link:"#"} ];
     const FALLBACK_PUBS = [ {id:1, image:"https://images.unsplash.com/photo-1497215728101-856f4ea42174", title:"BIENVENUE", description:"La plateforme d'excellence", link:"#", buttonText:"EXPLORER"} ];
 
@@ -32,7 +36,7 @@
     async function init() {
         initTheme();
         initPWA();
-        
+        await loadAnnonces();
         await loadPubs();
         loadSujets(); // Charge la vue par défaut
     }
@@ -40,7 +44,39 @@
     /* =========================================
        3. LOGIQUE D'AFFICHAGE (RENDERERS)
        ========================================= */
+   /* --- VUE ANNONCES (TICKER) --- */
+async function loadAnnonces() {
+    const ticker = document.getElementById('ticker');
+    if (!ticker) return; // Sécurité si l'élément n'existe pas
+
+    try {
+        const res = await fetch(CONFIG.api.annonces);
+        if(!res.ok) throw new Error("Erreur réseau");
+        const data = await res.json();
+        
+        // Si l'API renvoie un tableau vide, utiliser le secours
+        renderAnnonces(data.length > 0 ? data : FALLBACK_ANNONCES);
+    } catch(e) {
+        console.error("Annonces non chargées, utilisation du fallback.");
+        renderAnnonces(FALLBACK_ANNONCES);
+    }
+}
+
+function renderAnnonces(list) {
+    const ticker = document.getElementById('ticker');
+    ticker.innerHTML = ''; // Nettoyage
     
+    list.forEach(ann => {
+        const a = document.createElement('a');
+        a.href = ann.link || "#";
+        a.className = "ticker-item";
+        a.style.display = "inline-block"; // Assure le défilement
+        a.style.marginRight = "50px";
+        a.innerHTML = `<i class="fas fa-star" style="color:yellow; margin-right:8px;"></i> ${ann.text}`;
+        ticker.appendChild(a);
+    });
+}
+
     // --- VUE SUJETS & CORRIGÉS ---
     async function loadSujets() {
         showLoader(true);
@@ -353,6 +389,36 @@
         localStorage.setItem('theme', next);
         document.getElementById('themeIcon').className = next==='dark'?'fas fa-moon':'fas fa-sun';
     }
+    
+    
+    window.addEventListener('load', function() {
+    const splash = document.getElementById('splash-screen');
+    
+    // On attend un petit délai (ex: 2 secondes) pour que l'utilisateur 
+    // voit l'animation, puis on cache le splash screen.
+    setTimeout(() => {
+        splash.style.opacity = '0';
+        splash.style.transition = 'opacity 0.5s ease';
+        
+        // Supprimer complètement du DOM après la transition
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 500);
+        
+    }, 2500); 
+});
+
+window.addEventListener('offline', () => {
+    alert("Attention : Vous venez de perdre la connexion !");
+    // Tu peux aussi afficher un bandeau rouge en haut de l'écran ici
+});
+
+window.addEventListener('online', () => {
+    console.log("Connexion rétablie !");
+    // Tu peux recharger la page automatiquement si tu veux
+    window.location.reload();
+});
+
     
     // PWA & Menu
     function toggleMenu() { 
